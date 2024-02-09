@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <title>F13 Technologies</title>
+</head>
+
+<body>
+
+    <!--========== SCROLL TOP ==========-->
+    <a href="#" class="scrolltop" id="scroll-top">
+        <i class='bx bx-chevron-up scrolltop__icon'></i>
+    </a>
+
+    <!--========== HEADER ==========-->
+    <header class="l-header" id="header">
+        <nav class="nav bd-container">
+            <a href="https://www.f13.tech/" target="_blank" class="nav__logo">🎆F13 Technologies🎆</a>
+
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="#home" class="nav__link active-link">Home</a></li>
+                    <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
+                    <li class="nav__item"><a href="#data" class="nav__link">Data</a></li>
+                    <li class="nav__item"><a href="#team" class="nav__link">Team</a></li>
+                    <li class="nav__item"><a href="#contact" class="nav__link">Contact Us</a></li>
+
+                    <li><i class='bx bx-moon change-theme' id="theme-button"></i></li>
+                </ul>
+            </div>
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class='bx bx-menu'></i>
+            </div>
+        </nav>
+    </header>
+
+    <main class="l-main">
+        <!--========== HOME ==========-->
+        <section class="home" id="home">
+            <div class="home__container bd-container bd-grid">
+                <div class="home__data">
+                    <h1 class="home__title">Welcome to our Website</h1>
+                    <h2 class="home__subtitle">This is the home section where you can find information about our
+                        company.</h2>
+                    <a href="#team" class="button">View Team</a>
+                </div>
+
+                <img src="https://github.com/Bharath-1731/DummyImages/blob/d68664c140ed44959c2f2040f197d7a2dfbed3a4/hero1.png?raw=true"
+                    alt="" class="home__img">
+            </div>
+        </section>
+
+        <!--========== ABOUT ==========-->
+        <section class="about section bd-container" id="about">
+            <div class="about__container  bd-grid">
+                <div class="about__data">
+                    <span class="section-subtitle about__initial">About us</span>
+                    <h2 class="section-title about__initial">F13 helps companies make better</h2>
+                    <p class="about__description">Our work at F13 Technologies highlights our commitment to capturing
+                        more innovation than anyone else in the industry, providing more ways to help customers
+                        transform data into actionable insights, and improving the overall user experience. We believe
+                        paid, owned and earned data doesn't work in isolation, and nor should teams. As the tech
+                        landscape continues to converge, so do our solutions.</p>
+                    <a href="https://www.f13.tech/about-2/" class="button">History</a>
+                </div>
+
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGqh65vbmHPEU9mneTs_oPzfPBnjYBV4aJgg&usqp=CAU"
+                    alt="" class="about__img">
+            </div>
+        </section>
+
+        <!--========== DATA ==========-->
+        <section class="data section bd-container" id="data">
+            <span class="section-subtitle">Data</span>
+            <h2 class="section-title">Inquiry</h2>
+
+            <!-- Input form -->
+            <form action="<?php echo $_SERVER['SCRIPT_NAME'] ?>" method="POST">
+                <div class="input-container">
+                    <div class="input-row">
+                        <label for="name">NAME:</label>
+                        <input type="text" id="name" name="NAME" maxlength="45" size="30" />
+                    </div>
+                    <div class="input-row">
+                        <label for="address">ADDRESS:</label>
+                        <input type="text" id="address" name="ADDRESS" maxlength="90" size="60" />
+                    </div>
+                    <div class="input-row">
+                        <label for="phone">PHONE NUMBER:</label>
+                        <input type="text" id="phone" name="PHONE_NUMBER" maxlength="10" size="15" />
+                        <span class="note">(Maximum 10 digits)</span> <!-- Add a note for maximum length -->
+                    </div>
+                    <div class="input-row">
+                        <label for="age">AGE:</label>
+                        <input type="text" id="age" name="AGE" maxlength="2" />
+                    </div>
+                    <div class="input-row">
+                        <label for="sex">SEX:</label>
+                        <select id="sex" name="SEX">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-row">
+                        <input class="button" type="submit" value="Submit" />
+                    </div>
+                </div>
+            </form>
+<h3>This is the Real-time Data</h3>
+<h5>NOTE: The SQL backend in not connected from AWS RDS so displaying error.</h5>
+<hr>
+            <?php
+    // Database configuration and connection
+    include "../inc/dbinfo.inc";
+    $connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
+    if (mysqli_connect_errno()) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    } else {
+        $database = mysqli_select_db($connection, DB_DATABASE);
+        if (!$database) {
+            echo "Failed to select database: " . mysqli_error($connection);
+        } else {
+            VerifyEmployeesTable($connection, DB_DATABASE);
+            // Adding employee data
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $employee_name = isset($_POST['NAME']) ? htmlentities($_POST['NAME']) : '';
+                $employee_address = isset($_POST['ADDRESS']) ? htmlentities($_POST['ADDRESS']) : '';
+                $employee_phone_number = isset($_POST['PHONE_NUMBER']) ? htmlentities($_POST['PHONE_NUMBER']) : '';
+                $employee_age = isset($_POST['AGE']) ? (int)$_POST['AGE'] : 0;
+                $employee_sex = isset($_POST['SEX']) ? htmlentities($_POST['SEX']) : '';
+                if ($employee_name || $employee_address || $employee_phone_number || $employee_age || $employee_sex) {
+                    AddEmployee($connection, $employee_name, $employee_address, $employee_phone_number, $employee_age, $employee_sex);
+                }
+            }
+            // Displaying table data
+            $result = mysqli_query($connection, "SELECT * FROM EMPLOYEES");
+            if (!$result) {
+                echo "Error fetching data: " . mysqli_error($connection);
+            } else {
+                echo "<table border='1' cellpadding='2' cellspacing='2'>";
+                echo "<tr><td>ID</td><td>NAME</td><td>ADDRESS</td><td>PHONE NUMBER</td><td>AGE</td><td>SEX</td></tr>";
+                while ($query_data = mysqli_fetch_row($result)) {
+                    echo "<tr>";
+                    echo "<td>", $query_data[0], "</td>",
+                    "<td>", $query_data[1], "</td>",
+                    "<td>", $query_data[2], "</td>",
+                    "<td>", $query_data[3], "</td>",
+                    "<td>", $query_data[4], "</td>",
+                    "<td>", $query_data[5], "</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+                mysqli_free_result($result);
+            }
+            mysqli_close($connection);
+        }
+    }
+    // Function to add employee data
+    function AddEmployee($connection, $name, $address, $phone_number, $age, $sex)
+    {
+        $n = mysqli_real_escape_string($connection, $name);
+        $a = mysqli_real_escape_string($connection, $address);
+        $p = mysqli_real_escape_string($connection, $phone_number);
+        $ag = (int)$age;
+        $s = mysqli_real_escape_string($connection, $sex);
+        $query = "INSERT INTO EMPLOYEES (NAME, ADDRESS, PHONE_NUMBER, AGE, SEX) VALUES ('$n', '$a', '$p', $ag, '$s')";
+        if (!mysqli_query($connection, $query)) {
+            echo "<p>Error adding employee data: " . mysqli_error($connection) . "</p>";
+        }
+    }
+    // Function to verify table existence
+    function VerifyEmployeesTable($connection, $dbName)
+    {
+        if (!TableExists("EMPLOYEES", $connection, $dbName)) {
+            $query = "CREATE TABLE EMPLOYEES (
+             ID int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+             NAME VARCHAR(45),
+             ADDRESS VARCHAR(90),
+             PHONE_NUMBER VARCHAR(20),
+             AGE INT,
+             SEX VARCHAR(10)
+           )";
+            if (!mysqli_query($connection, $query)) echo("<p>Error creating table.</p>");
+        }
+    }
+    // Function to check table existence
+    function TableExists($tableName, $connection, $dbName)
+    {
+        $t = mysqli_real_escape_string($connection, $tableName);
+        $d = mysqli_real_escape_string($connection, $dbName);
+        $checktable = mysqli_query($connection,
+            "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = '$t' AND TABLE_SCHEMA = '$d'");
+        if (mysqli_num_rows($checktable) > 0) return true;
+        return false;
+    }
+    ?>
+    <hr>
+    <br>
+    <h3>This is the Dummy Data</h3>
+    <br>
+    <table class="rwd-table">
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone Number</th>
+            <th>Age</th>
+            <th>Sex</th>
+          </tr>
+          <tr>
+            <td data-th="Name">
+              Bharath
+            </td>
+            <td data-th="Address">
+              Tamil Nadu
+            </td>
+            <td data-th="Phone Number">
+              123456789
+            </td>
+            <td data-th="Age">
+              12
+            </td>
+            <td data-th="Sex">
+              M
+            </td>
+          </tr>
+          <tr>
+            <td data-th="Name">
+              Dushyant
+            </td>
+            <td data-th="Address">
+              Chhattisgarh
+            </td>
+            <td data-th="Phone Number">
+              1011121314
+            </td>
+            <td data-th="Age">
+              34
+            </td>
+            <td data-th="Sex">
+              M
+            </td>
+          </tr>
+          <tr>
+            <td data-th="Name">
+              Hritik
+            </td>
+            <td data-th="Address">
+              Maharashtra
+            </td>
+            <td data-th="Phone Number">
+              1516171819
+            </td>
+            <td data-th="Age">
+              56
+            </td>
+            <td data-th="Sex">
+              M
+            </td>
+          </tr>
+          <tr>
+            <td data-th="Name">
+              Prathamesh
+            </td>
+            <td data-th="Address">
+              Maharashtra
+            </td>
+            <td data-th="Phone Number">
+              2021222324
+            </td>
+            <td data-th="Age">
+              78
+            </td>
+            <td data-th="Sex">
+              M
+            </td>
+          </tr>
+          <tr>
+            <td data-th="Name">
+              Srivats
+            </td>
+            <td data-th="Address">
+              Karnataka
+            </td>
+            <td data-th="Phone Number">
+              2526272829
+            </td>
+            <td data-th="Age">
+              910
+            </td>
+            <td data-th="Sex">
+              M
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+        </section>
+
+
+        <!--========== TEAM ==========-->
+        <section class="team section bd-container" id="team">
+            <span class="section-subtitle">TEAM</span>
+            <h2 class="section-title">Our Team</h2>
+
+            <div class="team__container bd-grid">
+                <div class="team__content">
+                    <img src="https://github.com/Bharath-1731/DummyImages/blob/59831b3944350141bc556f1bdae85bb6971c8f12/1.png?raw=true"
+                        alt="" class="team__img">
+                    <h3 class="team__name">Bharath Sharma</h3>
+                </div>
+
+                <div class="team__content">
+                    <img src="https://github.com/Bharath-1731/DummyImages/blob/59831b3944350141bc556f1bdae85bb6971c8f12/2.png?raw=true"
+                        alt="" class="team__img">
+                    <h3 class="team__name">K Dushyant Reddy</h3>
+                </div>
+
+                <div class="team__content">
+                    <img src="https://github.com/Bharath-1731/DummyImages/blob/59831b3944350141bc556f1bdae85bb6971c8f12/3.png?raw=true"
+                        alt="" class="team__img">
+                    <h3 class="team__name">Hritik Parbat</h3>
+                </div>
+
+                <div class="team__content">
+                    <img src="https://github.com/Bharath-1731/DummyImages/blob/59831b3944350141bc556f1bdae85bb6971c8f12/4.png?raw=true"
+                        alt="" class="team__img">
+                    <h3 class="team__name">Prathamesh Chatte</h3>
+                </div>
+
+                <div class="team__content">
+                    <img src="https://github.com/Bharath-1731/DummyImages/blob/59831b3944350141bc556f1bdae85bb6971c8f12/5.png?raw=true"
+                        alt="" class="team__img">
+                    <h3 class="team__name">Srivats V</h3>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!--========== CONTACT US ==========-->
+        <section class="contact section bd-container" id="contact">
+            <div class="contact__container bd-grid">
+                <div class="contact__data">
+                    <span class="section-subtitle contact__initial">Wanna meet</span>
+                    <h2 class="section-title contact__initial">Contact Us</h2>
+                    <p class="contact__description"></p>
+                </div>
+
+                <div class="contact__button">
+                    <a href="#" class="button">Contact now</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!--========== FOOTER ==========-->
+    <footer class="footer section bd-container">
+        <div class="footer__container bd-grid">
+            <div class="footer__content">
+                <a href="#" class="footer__logo">F13 Technologies</a>
+                <span class="footer__description">Dynamic Website</span>
+                <div>
+                    <a href="#" class="footer__social"><i class='bx bxl-facebook'></i></a>
+                    <a href="#" class="footer__social"><i class='bx bxl-instagram'></i></a>
+                    <a href="#" class="footer__social"><i class='bx bxl-twitter'></i></a>
+                </div>
+            </div>
+
+
+            <div class="footer__content">
+                <h3 class="footer__title">Information</h3>
+                <ul>
+                    <li><a href="#" class="footer__link">Event</a></li>
+                    <li><a href="#" class="footer__link">Contact Us</a></li>
+                    <li><a href="#" class="footer__link">Privacy Policy</a></li>
+                    <li><a href="#" class="footer__link">Terms of Services</a></li>
+                </ul>
+            </div>
+
+            <div class="footer__content">
+                <h3 class="footer__title">Address</h3>
+                <ul>
+                    <li>ABCD</li>
+                    <li>Ef Ghij 12A</li>
+                    <li>1234567891</li>
+                    <li>f13tech@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="footer__copy">&#169; 2024 F13 Technologies. All right reserved</p>
+    </footer>
+
+    <!--========== SCROLL REVEAL ==========-->
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!--========== MAIN JS ==========-->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
