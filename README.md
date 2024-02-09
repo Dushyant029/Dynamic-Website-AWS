@@ -1,7 +1,7 @@
 # Dynamic Website
 A simple responsive Dynamic website using HTML,CSS and SaSS with the feature of light-mode and dark-mode edition and backend SQL connection.
 
-## Preview: https://dushyant029.github.io//
+## [Preview:](https://dushyant029.github.io/Dynamic-Website-AWS/)
 
 ![image](https://github.com/Dushyant029/Dynamic-Website-AWS/assets/55031190/25fe4cf9-f317-4103-99f0-c59012db6647)
 
